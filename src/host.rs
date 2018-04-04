@@ -326,7 +326,7 @@ impl<T: Host> PluginLoader<T> {
         Ok(PluginLoader {
             main: unsafe {
                 // Search the library for the VSTAPI entry point
-                match lib.get(b"VSTPluginMain") {
+                match lib.get(b"VSTPluginMain").or_else(|_| lib.get(b"main")) {
                     Ok(s) => *s,
                     _ => return Err(PluginLoadError::NotAPlugin),
                 }
@@ -363,7 +363,7 @@ impl<T: Host> PluginLoader<T> {
         let instance = PluginInstance::new(effect, Arc::clone(&self.lib));
 
         let api_ver = instance.dispatch(plugin::OpCode::GetApiVersion, 0, 0, ptr::null_mut(), 0.0);
-        if api_ver >= 2400 {
+        if api_ver >= 2200 {
             Ok(instance)
         } else {
             trace!("Could not load plugin with api version {}", api_ver);

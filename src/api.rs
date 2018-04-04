@@ -13,8 +13,8 @@ pub mod consts {
     pub const MAX_PARAM_STR_LEN: usize = 32;
     pub const MAX_LABEL: usize = 64;
     pub const MAX_SHORT_LABEL: usize = 8;
-    pub const MAX_PRODUCT_STR_LEN: usize = 64;
-    pub const MAX_VENDOR_STR_LEN: usize = 64;
+    pub const MAX_PRODUCT_STR_LEN: usize = 32;
+    pub const MAX_VENDOR_STR_LEN: usize = 32;
 
     /// VST plugins are identified by a magic number. This corresponds to 0x56737450.
     pub const VST_MAGIC: i32 = ('V' as i32) << 24 | ('s' as i32) << 16 | ('t' as i32) << 8 |
