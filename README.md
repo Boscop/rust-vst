@@ -48,10 +48,15 @@ crate-type directive which builds a dynamic library, usable by any VST host.
 #[macro_use]
 extern crate vst;
 
-use vst::plugin::{Info, Plugin};
+use vst::plugin::{HostCallback, Info, Plugin, PluginWithNew};
 
-#[derive(Default)]
 struct BasicPlugin;
+
+impl PluginWithNew for BasicPlugin {
+    fn new(_host: HostCallback) -> Self {
+        BasicPlugin
+    }
+}
 
 impl Plugin for BasicPlugin {
     fn get_info(&self) -> Info {

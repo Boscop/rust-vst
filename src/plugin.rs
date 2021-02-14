@@ -453,6 +453,50 @@ impl Into<String> for CanDo {
 }
 
 /// Must be implemented by all VST plugins.
+pub trait PluginWithNew: Plugin {
+    /// Called during initialization to pass a `HostCallback` to the plugin.
+    ///
+    /// This method can be overriden to set `host` as a field in the plugin struct.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// // ...
+    /// # extern crate vst;
+    /// # #[macro_use] extern crate log;
+    /// # use vst::plugin::{Plugin, Info};
+    /// use vst::plugin::{HostCallback, PluginWithNew};
+    ///
+    /// struct ExamplePlugin {
+    ///     host: HostCallback
+    /// }
+    ///
+    /// impl PluginWithNew for ExamplePlugin {
+    ///     fn new(host: HostCallback) -> Self {
+    ///         ExamplePlugin { host }
+    ///     }
+    /// }
+    ///
+    /// impl Plugin for ExamplePlugin {
+    ///     fn init(&mut self) {
+    ///         info!("loaded with host vst version: {}", self.host.vst_version());
+    ///     }
+    ///
+    ///     // ...
+    /// #     fn get_info(&self) -> Info {
+    /// #         Info {
+    /// #             name: "Example Plugin".to_string(),
+    /// #             ..Default::default()
+    /// #         }
+    /// #     }
+    /// }
+    ///
+    /// # fn main() {}
+    /// ```
+    fn new(host: HostCallback) -> Self;
+}
+
+/// Must be implemented by all VST plugins.
 ///
 /// All methods except `get_info` provide a default implementation which does nothing and can be
 /// safely overridden.
@@ -473,53 +517,6 @@ impl Into<String> for CanDo {
 pub trait Plugin {
     /// This method must return an `Info` struct.
     fn get_info(&self) -> Info;
-
-    /// Called during initialization to pass a `HostCallback` to the plugin.
-    ///
-    /// This method can be overriden to set `host` as a field in the plugin struct.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// // ...
-    /// # extern crate vst;
-    /// # #[macro_use] extern crate log;
-    /// # use vst::plugin::{Plugin, Info};
-    /// use vst::plugin::HostCallback;
-    ///
-    /// # #[derive(Default)]
-    /// struct ExamplePlugin {
-    ///     host: HostCallback
-    /// }
-    ///
-    /// impl Plugin for ExamplePlugin {
-    ///     fn new(host: HostCallback) -> ExamplePlugin {
-    ///         ExamplePlugin {
-    ///             host: host
-    ///         }
-    ///     }
-    ///
-    ///     fn init(&mut self) {
-    ///         info!("loaded with host vst version: {}", self.host.vst_version());
-    ///     }
-    ///
-    ///     // ...
-    /// #     fn get_info(&self) -> Info {
-    /// #         Info {
-    /// #             name: "Example Plugin".to_string(),
-    /// #             ..Default::default()
-    /// #         }
-    /// #     }
-    /// }
-    ///
-    /// # fn main() {}
-    /// ```
-    fn new(host: HostCallback) -> Self
-    where
-        Self: Sized + Default,
-    {
-        Default::default()
-    }
 
     /// Called when plugin is fully initialized.
     ///
@@ -1003,7 +1000,7 @@ mod tests {
             use main;
             use api::AEffect;
             use host::{Host, OpCode};
-            use plugin::{HostCallback, Info, Plugin};
+            use plugin::{HostCallback, Info, Plugin, PluginWithNew};
 
             $(#[$attr]) *
             struct TestPlugin {
@@ -1018,12 +1015,6 @@ mod tests {
                     }
                 }
 
-                fn new(host: HostCallback) -> TestPlugin {
-                    TestPlugin {
-                        host
-                    }
-                }
-
                 fn init(&mut self) {
                     info!("Loaded with host vst version: {}", self.host.vst_version());
                     assert_eq!(2400, self.host.vst_version());
@@ -1033,6 +1024,14 @@ mod tests {
                     self.host.automate(123, 12.3);
                     self.host.end_edit(123);
                     self.host.idle();
+                }
+            }
+
+            impl PluginWithNew for TestPlugin {
+                fn new(host: HostCallback) -> Self {
+                    TestPlugin {
+                        host
+                    }
                 }
             }
 

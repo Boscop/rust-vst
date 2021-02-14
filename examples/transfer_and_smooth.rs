@@ -11,7 +11,7 @@ use std::f32;
 use std::sync::Arc;
 
 use vst::buffer::AudioBuffer;
-use vst::plugin::{Category, HostCallback, Info, Plugin, PluginParameters};
+use vst::plugin::{Category, HostCallback, Info, Plugin, PluginParameters, PluginWithNew};
 use vst::util::ParameterTransfer;
 
 const PARAMETER_COUNT: usize = 100;
@@ -21,7 +21,6 @@ const TWO_PI: f32 = 2.0 * f32::consts::PI;
 
 // 1. Define a struct to hold parameters. Put a ParameterTransfer inside it,
 // plus optionally a HostCallback.
-#[derive(Default)]
 struct MyPluginParameters {
     #[allow(dead_code)]
     host: HostCallback,
@@ -29,7 +28,6 @@ struct MyPluginParameters {
 }
 
 // 2. Put an Arc reference to your parameter struct in your main Plugin struct.
-#[derive(Default)]
 struct MyPlugin {
     params: Arc<MyPluginParameters>,
     states: Vec<Smoothed>,
@@ -50,7 +48,7 @@ impl PluginParameters for MyPluginParameters {
     }
 }
 
-impl Plugin for MyPlugin {
+impl PluginWithNew for MyPlugin {
     fn new(host: HostCallback) -> Self {
         MyPlugin {
             // 4. Initialize your main Plugin struct with a parameter struct
@@ -64,7 +62,9 @@ impl Plugin for MyPlugin {
             phase: 0.0,
         }
     }
+}
 
+impl Plugin for MyPlugin {
     fn get_info(&self) -> Info {
         Info {
             parameters: PARAMETER_COUNT as i32,

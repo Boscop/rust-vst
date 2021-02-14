@@ -17,7 +17,7 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Arc;
 
 use vst::buffer::AudioBuffer;
-use vst::plugin::{Category, Info, Plugin, PluginParameters};
+use vst::plugin::{Category, HostCallback, Info, Plugin, PluginParameters, PluginWithNew};
 use vst::util::AtomicFloat;
 
 // this is a 4-pole filter with resonance, which is why there's 4 states and vouts
@@ -194,8 +194,8 @@ impl PluginParameters for LadderParameters {
         }
     }
 }
-impl Default for LadderFilter {
-    fn default() -> LadderFilter {
+impl PluginWithNew for LadderFilter {
+    fn new(_host: HostCallback) -> Self {
         LadderFilter {
             vout: [0f32; 4],
             s: [0f32; 4],

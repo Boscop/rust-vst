@@ -6,7 +6,7 @@ extern crate vst;
 use vst::api::{Events, Supported};
 use vst::buffer::AudioBuffer;
 use vst::event::Event;
-use vst::plugin::{CanDo, Category, Info, Plugin};
+use vst::plugin::{CanDo, Category, HostCallback, Info, Plugin, PluginWithNew};
 
 use std::f64::consts::PI;
 
@@ -65,8 +65,8 @@ impl SineSynth {
 
 pub const TAU: f64 = PI * 2.0;
 
-impl Default for SineSynth {
-    fn default() -> SineSynth {
+impl PluginWithNew for SineSynth {
+    fn new(_host: HostCallback) -> Self {
         SineSynth {
             sample_rate: 44100.0,
             note_duration: 0.0,

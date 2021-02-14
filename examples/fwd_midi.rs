@@ -4,7 +4,7 @@ extern crate vst;
 use vst::api;
 use vst::buffer::{AudioBuffer, SendEventBuffer};
 use vst::event::{Event, MidiEvent};
-use vst::plugin::{CanDo, HostCallback, Info, Plugin};
+use vst::plugin::{CanDo, HostCallback, Info, Plugin, PluginWithNew};
 
 plugin_main!(MyPlugin); // Important!
 
@@ -22,13 +22,16 @@ impl MyPlugin {
     }
 }
 
-impl Plugin for MyPlugin {
+impl PluginWithNew for MyPlugin {
     fn new(host: HostCallback) -> Self {
-        let mut p = MyPlugin::default();
-        p.host = host;
-        p
+        MyPlugin {
+            host,
+            ..Default::default()
+        }
     }
+}
 
+impl Plugin for MyPlugin {
     fn get_info(&self) -> Info {
         Info {
             name: "fwd_midi".to_string(),

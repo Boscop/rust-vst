@@ -37,10 +37,15 @@
 //! #[macro_use]
 //! extern crate vst;
 //!
-//! use vst::plugin::{Info, Plugin};
+//! use vst::plugin::{HostCallback, Info, Plugin, PluginWithNew};
 //!
-//! #[derive(Default)]
 //! struct BasicPlugin;
+//!
+//! impl PluginWithNew for BasicPlugin {
+//!     fn new(_host: HostCallback) -> Self {
+//!         BasicPlugin
+//!     }
+//! }
 //!
 //! impl Plugin for BasicPlugin {
 //!     fn get_info(&self) -> Info {
@@ -113,6 +118,7 @@ extern crate log;
 #[macro_use]
 extern crate bitflags;
 
+use plugin::PluginWithNew;
 use std::ptr;
 
 /// Implements `From` and `Into` for enums with `#[repr(usize)]`. Useful for interfacing with C
@@ -187,7 +193,7 @@ macro_rules! plugin_main {
 
 /// Initializes a VST plugin and returns a raw pointer to an AEffect struct.
 #[doc(hidden)]
-pub fn main<T: Plugin + Default>(callback: HostCallbackProc) -> *mut AEffect {
+pub fn main<T: PluginWithNew>(callback: HostCallbackProc) -> *mut AEffect {
     // Initialize as much of the AEffect as we can before creating the plugin.
     // In particular, initialize all the function pointers, since initializing
     // these to zero is undefined behavior.
@@ -292,9 +298,8 @@ mod tests {
     use api::consts::VST_MAGIC;
     use api::AEffect;
     use interfaces;
-    use plugin::{Info, Plugin};
+    use plugin::{HostCallback, Info, Plugin, PluginWithNew};
 
-    #[derive(Default)]
     struct TestPlugin;
 
     impl Plugin for TestPlugin {
@@ -313,6 +318,12 @@ mod tests {
 
                 ..Default::default()
             }
+        }
+    }
+
+    impl PluginWithNew for TestPlugin {
+        fn new(_host: HostCallback) -> Self {
+            TestPlugin
         }
     }
 
