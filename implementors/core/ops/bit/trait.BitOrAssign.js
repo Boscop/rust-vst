@@ -1,10 +1,3 @@
 (function() {var implementors = {};
-implementors["vst2"] = ["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/bit/trait.BitOrAssign.html\" title=\"trait core::ops::bit::BitOrAssign\">BitOrAssign</a> for <a class=\"struct\" href=\"vst2/api/flags/struct.Channel.html\" title=\"struct vst2::api::flags::Channel\">Channel</a>","impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/bit/trait.BitOrAssign.html\" title=\"trait core::ops::bit::BitOrAssign\">BitOrAssign</a> for <a class=\"struct\" href=\"vst2/api/flags/struct.Plugin.html\" title=\"struct vst2::api::flags::Plugin\">Plugin</a>","impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/bit/trait.BitOrAssign.html\" title=\"trait core::ops::bit::BitOrAssign\">BitOrAssign</a> for <a class=\"struct\" href=\"vst2/api/flags/struct.ModifierKey.html\" title=\"struct vst2::api::flags::ModifierKey\">ModifierKey</a>","impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/bit/trait.BitOrAssign.html\" title=\"trait core::ops::bit::BitOrAssign\">BitOrAssign</a> for <a class=\"struct\" href=\"vst2/api/flags/struct.MidiEvent.html\" title=\"struct vst2::api::flags::MidiEvent\">MidiEvent</a>",];
-
-            if (window.register_implementors) {
-                window.register_implementors(implementors);
-            } else {
-                window.pending_implementors = implementors;
-            }
-        
-})()
+implementors["vst"] = [{"text":"impl BitOrAssign&lt;ChannelFlags&gt; for ChannelFlags","synthetic":false,"types":[]},{"text":"impl BitOrAssign&lt;PluginFlags&gt; for PluginFlags","synthetic":false,"types":[]},{"text":"impl BitOrAssign&lt;ModifierKey&gt; for ModifierKey","synthetic":false,"types":[]},{"text":"impl BitOrAssign&lt;MidiEventFlags&gt; for MidiEventFlags","synthetic":false,"types":[]},{"text":"impl BitOrAssign&lt;TimeInfoFlags&gt; for TimeInfoFlags","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

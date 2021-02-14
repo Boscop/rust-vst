@@ -1,10 +1,3 @@
 (function() {var implementors = {};
-implementors["vst2"] = ["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html\" title=\"trait core::cmp::PartialOrd\">PartialOrd</a> for <a class=\"struct\" href=\"vst2/api/flags/struct.Channel.html\" title=\"struct vst2::api::flags::Channel\">Channel</a>","impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html\" title=\"trait core::cmp::PartialOrd\">PartialOrd</a> for <a class=\"struct\" href=\"vst2/api/flags/struct.Plugin.html\" title=\"struct vst2::api::flags::Plugin\">Plugin</a>","impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html\" title=\"trait core::cmp::PartialOrd\">PartialOrd</a> for <a class=\"struct\" href=\"vst2/api/flags/struct.ModifierKey.html\" title=\"struct vst2::api::flags::ModifierKey\">ModifierKey</a>","impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html\" title=\"trait core::cmp::PartialOrd\">PartialOrd</a> for <a class=\"struct\" href=\"vst2/api/flags/struct.MidiEvent.html\" title=\"struct vst2::api::flags::MidiEvent\">MidiEvent</a>",];
-
-            if (window.register_implementors) {
-                window.register_implementors(implementors);
-            } else {
-                window.pending_implementors = implementors;
-            }
-        
-})()
+implementors["vst"] = [{"text":"impl PartialOrd&lt;ChannelFlags&gt; for ChannelFlags","synthetic":false,"types":[]},{"text":"impl PartialOrd&lt;PluginFlags&gt; for PluginFlags","synthetic":false,"types":[]},{"text":"impl PartialOrd&lt;ModifierKey&gt; for ModifierKey","synthetic":false,"types":[]},{"text":"impl PartialOrd&lt;MidiEventFlags&gt; for MidiEventFlags","synthetic":false,"types":[]},{"text":"impl PartialOrd&lt;TimeInfoFlags&gt; for TimeInfoFlags","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
