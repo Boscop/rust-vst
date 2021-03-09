@@ -953,6 +953,12 @@
 <span id="950">950</span>
 <span id="951">951</span>
 <span id="952">952</span>
+<span id="953">953</span>
+<span id="954">954</span>
+<span id="955">955</span>
+<span id="956">956</span>
+<span id="957">957</span>
+<span id="958">958</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Host specific structures.</span>
 
@@ -974,7 +980,7 @@
 <span class="kw">use</span> <span class="ident">channels</span>::<span class="ident">ChannelInfo</span>;
 <span class="kw">use</span> <span class="ident">editor</span>::{<span class="ident">Editor</span>, <span class="ident">Rect</span>};
 <span class="kw">use</span> <span class="ident">interfaces</span>;
-<span class="kw">use</span> <span class="ident">plugin</span>::{<span class="self">self</span>, <span class="ident">Category</span>, <span class="ident">Info</span>, <span class="ident">Plugin</span>, <span class="ident">PluginParameters</span>};
+<span class="kw">use</span> <span class="ident">plugin</span>::{<span class="self">self</span>, <span class="ident">Category</span>, <span class="ident">HostCallback</span>, <span class="ident">Info</span>, <span class="ident">Plugin</span>, <span class="ident">PluginParameters</span>};
 
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">usize</span>)]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
@@ -1253,6 +1259,7 @@
     <span class="ident">effect</span>: <span class="ident">UnsafeCell</span><span class="op">&lt;</span><span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">AEffect</span><span class="op">&gt;</span>,
 }
 
+<span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="ident">PluginParametersInstance</span> {}
 <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Sync</span> <span class="kw">for</span> <span class="ident">PluginParametersInstance</span> {}
 
 <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">PluginInstance</span> {
@@ -1519,6 +1526,11 @@
 <span class="kw">impl</span> <span class="ident">Plugin</span> <span class="kw">for</span> <span class="ident">PluginInstance</span> {
     <span class="kw">fn</span> <span class="ident">get_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">plugin</span>::<span class="ident">Info</span> {
         <span class="self">self</span>.<span class="ident">info</span>.<span class="ident">clone</span>()
+    }
+
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">_host</span>: <span class="ident">HostCallback</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="comment">// Plugin::new is only called on client side and PluginInstance is only used on host side</span>
+        <span class="macro">unreachable</span><span class="macro">!</span>()
     }
 
     <span class="kw">fn</span> <span class="ident">init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
@@ -1846,7 +1858,7 @@
 <span class="kw">static</span> <span class="kw-2">mut</span> <span class="ident">LOAD_POINTER</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span> <span class="op">=</span> <span class="number">0</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>;
 
 <span class="doccomment">/// Function passed to plugin to handle dispatching host opcodes.</span>
-<span class="kw">fn</span> <span class="ident">callback_wrapper</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Host</span><span class="op">&gt;</span>(
+<span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">callback_wrapper</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Host</span><span class="op">&gt;</span>(
     <span class="ident">effect</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">AEffect</span>,
     <span class="ident">opcode</span>: <span class="ident">i32</span>,
     <span class="ident">index</span>: <span class="ident">i32</span>,
